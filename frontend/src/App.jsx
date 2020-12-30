@@ -97,7 +97,7 @@ const App = () => {
   
   // `deleteTodos` is a utility to delete all todos. This is also where, we'll 
   // send a request to the server to delete all todos from our database.
-  const deleteTodos = (id) => {
+  const deleteTodos = () => {
     setTodos([])
   }
 
