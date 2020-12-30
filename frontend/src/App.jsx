@@ -120,8 +120,8 @@ const App = () => {
   
   // `deleteTodos` is a utility to delete all todos. This is also where, we'll 
   // send a request to the server to delete all todos from our database.
-  const deleteTodos = (id) => {
-    client.deleteAllTodos(id).then(res => {
+  const deleteTodos = () => {
+    client.deleteAllTodos().then(res => {
       if (!res.ack) alert(res.error)
     })
   }
