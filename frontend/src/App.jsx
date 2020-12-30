@@ -4,7 +4,7 @@ import './App.css';
 
 // TodoInput is responsible to accept a user provided todo object. It calls the `addTodo`
 // utility function once the add button is hit.
-const TodoInput = ({addTodo}) => {
+const TodoInput = ({addTodo, deleteTodos}) => {
   // Declare a new state variable to store the text the users enters
   const [text, setText] = useState('');
 
@@ -13,12 +13,17 @@ const TodoInput = ({addTodo}) => {
     setText(e.target.value)
   }
 
-  // `handleUpdate` invokes the `addTodo` utility whenever the user hits the add button
-  const handleClick = () => {
+  // `handleAddTodo` invokes the `addTodo` utility whenever the user hits the add button
+  const handleAddTodo = () => {
     addTodo(text)
 
     // Don't forget to reset the state
     setText("")
+  }
+
+  // `handleDeleteTodos` invokes the `deleteTodos` utility whenever the user hits the `Delete All` button
+  const handleDeleteTodos = () => {
+    deleteTodos()
   }
 
   return (
@@ -28,8 +33,11 @@ const TodoInput = ({addTodo}) => {
         {/* We pass the `handleUpdate` fn to the `onChange` listener to update our state on each key press */}
         <input type="text" value={text} onChange={handleUpdate}/>
 
-        {/* We pass the `handleClick` fn to the `onClick` listener to pass the add todo event to our parent */}
-        <button onClick={handleClick}>Add</button>
+        {/* We pass the `handleAddTodo` fn to the `onClick` listener to pass the add todo event to our parent */}
+        <button onClick={handleAddTodo}>Add</button>
+
+        {/* We pass the `handleDeleteTodos` fn to the `onClick` listener to pass the delete all todos event to our parent */}
+        <button style={{marginLeft: "10px"}} onClick={handleDeleteTodos}>Delete All</button>
       </span>
     </div>
   )
@@ -64,7 +72,7 @@ const TodoList = ({todos, updateTodo, deleteTodo}) => {
 
 const App = () => {
   // Declare a new state variable to store the todos
-  const [todos, setTodos] = useState([{id: "12", value: "t1", is_completed: true}]);
+  const [todos, setTodos] = useState([]);
 
   // `addTodo` is a utility to add todos to our state. This is also where, we'll
   // send a request to the server to add the todo to our database. 
@@ -73,7 +81,7 @@ const App = () => {
   }
 
   // `updateTodo` is a utility to update the `is_completed` field of the concerned todo.
-  // This is also where, we'll send a request to the server to update the todo in our database
+  // This is also where, we'll send a request to the server to update the todo in our database.
   const updateTodo = (id, is_completed) => {
     setTodos(todos.map(todo => {
       if (todo.id === id) return Object.assign({}, todo, { is_completed: is_completed })
@@ -82,16 +90,22 @@ const App = () => {
   } 
 
   // `deleteTodo` is a utility to delete the concerned todo. This is also where, we'll 
-  // send a request to the server to delete the todo from our database
+  // send a request to the server to delete the todo from our database.
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id))
+  }
+  
+  // `deleteTodos` is a utility to delete all todos. This is also where, we'll 
+  // send a request to the server to delete all todos from our database.
+  const deleteTodos = (id) => {
+    setTodos([])
   }
 
   return (
     <div className="app">
       <h2>Realtime Todo App</h2>
       <br/>
-      <TodoInput addTodo={addTodo} />
+      <TodoInput addTodo={addTodo} deleteTodos={deleteTodos} />
       <div>
         <TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} />
       </div>

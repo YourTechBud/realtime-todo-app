@@ -1,70 +1,27 @@
-# Getting Started with Create React App
+# Building a realtime todo app using CDC
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app uses the following tools:
+- [React js](https://reactjs.org/) on the frontend.
+- [MySQL](https://www.mysql.com/) as the database.
+- [Debezium](https://debezium.io/) for Change Data Capture.
+- [SpaceCloud](https://spaceuptech.com) as a realtime data layer.
 
-## Available Scripts
+## Prerequisites
+ 
+- You'll need to have [Docker](https://docs.docker.com/engine/install/) installed. This project uses `docker-compose` to bring the backend components up.
+- [Nodejs](https://nodejs.org/en/download/) is needed to build and run the react app.
 
-In the project directory, you can run:
+## How to start the app
 
-### `npm start`
+- Simply run `docker-compose up -d` to bring up MySQL, Debezium and SpaceCloud. 
+- Once all the containers are up, Open [http://localhost:4122/mission-control](http://localhost:4122/mission-control).
+- Head over to the `Settings` tab in the `Database` section and hit `Modify schema` to create the necessary tables.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Modify Schema Image](https://raw.githubusercontent.com/YourTechBud/realtime-todo-app/master/modify-schema.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Test it out
 
-### `npm test`
+Simply move into the frontend directory (`cd frontend`) and run `npm i` and `npm start`. The todo app should be up on [http://localhost:3000](http://localhost:3000). Open the app in two windows to watch the realtime magic in action.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> **The app is configured to find the server on localhost. If you wish to run your app from other devices, replace `localhost` to `YOUR_IP` in `frontend/src/client.js`.**
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

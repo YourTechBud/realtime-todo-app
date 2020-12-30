@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+
+  gateway:
+    image: spaceuptech/gateway:0.20.1
+    environment:
+      - ADMIN_USER=admin
+      - ADMIN_PASS=1234
+      - ADMIN_SECRET=some-secret
+      - LOG_LEVEL=info
+      - LOG_FORMAT=text
+      - DEV=true
+      - "REDIS_CONN=redis:6379"
+      - "CLUSTER_ID=todo-cluster"
+      - "CONFIG=/config/config.yaml"
+    volumes:
+      - ./sc-config:/config
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "4122:4122"
+
+  debezium:
+    image: spaceuptech/dbevents:0.1.0
+    environment:
+      - "SC_ADMIN_SECRET=some-secret"
+      - "GATEWAY_URL=gateway:4122"
+    depends_on:
+      - gateway
+      - mysql
+
+volumes:
+  mysql-data:
+  sc-data:
