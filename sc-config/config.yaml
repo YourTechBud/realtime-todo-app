@@ -1,0 +1,131 @@
+cacheConfig:
+  conn: ""
+  defaultTTL: 0
+  enabled: false
+clusterConfig:
+  enableTelemetry: false
+  letsencryptEmail: ""
+integrations: {}
+integrationsHooks: {}
+license:
+  license: ""
+  licenseKey: ""
+  licenseValue: ""
+projects:
+  todoapp:
+    auths: {}
+    dbConfigs:
+      todo-cluster--todoapp--db-config--mysql:
+        conn: root:my-secret-pw@tcp(mysql:3306)/
+        dbAlias: mysql
+        driverConf: {}
+        enabled: true
+        isPrimary: false
+        limit: 1000
+        name: todoapp
+        type: mysql
+    dbPreparedQuery:
+      todo-cluster--todoapp--db-prepared-query--mysql-default:
+        args: []
+        dbAlias: mysql
+        id: default
+        rule:
+          rule: allow
+        sql: ""
+    dbRules:
+      todo-cluster--todoapp--db-rule--mysql-default-rule:
+        col: default
+        dbAlias: mysql
+        rules:
+          create:
+            rule: allow
+          delete:
+            rule: allow
+          read:
+            rule: allow
+          update:
+            rule: allow
+      todo-cluster--todoapp--db-rule--mysql-event_logs-rule:
+        col: event_logs
+        dbAlias: mysql
+        rules:
+          create:
+            rule: deny
+          delete:
+            rule: deny
+          read:
+            rule: deny
+          update:
+            rule: deny
+      todo-cluster--todoapp--db-rule--mysql-invocation_logs-rule:
+        col: invocation_logs
+        dbAlias: mysql
+        rules:
+          create:
+            rule: deny
+          delete:
+            rule: deny
+          read:
+            rule: deny
+          update:
+            rule: deny
+      todo-cluster--todoapp--db-rule--mysql-todos-rule:
+        col: todos
+        dbAlias: mysql
+        isRealtimeEnabled: true
+    dbSchemas:
+      todo-cluster--todoapp--db-schema--mysql-event_logs:
+        col: event_logs
+        dbAlias: mysql
+        schema: "type event_logs {\n\t\t_id: ID! @primary\n\t\tbatchid: String\n\t\ttype: String\n\t\trule_name: String\n\t\ttoken: Integer\n\t\tts: DateTime\n\t\tevent_ts: DateTime @createdAt\n\t\tpayload: String\n\t\tstatus: String\n\t\tremark: String\n\t\ttrigger_type: ID @size(value: 10)\n\t\tinvocations: [invocation_logs]! @link(table: \"invocation_logs\", from: \"_id\", to: \"event_id\")\n\t  }"
+      todo-cluster--todoapp--db-schema--mysql-invocation_logs:
+        col: invocation_logs
+        dbAlias: mysql
+        schema: "type invocation_logs {\n\t\t_id: ID! @primary\n\t\tevent_id: ID! @foreign(table: \"event_logs\", field: \"_id\")\n\t\tinvocation_time: DateTime! @createdAt\n\t\trequest_payload: String\n\t\tresponse_status_code: Integer\n\t\tresponse_body: String\n\t\terror_msg: String\n\t\tremark: String\t\n\t  }"
+      todo-cluster--todoapp--db-schema--mysql-todos:
+        col: todos
+        dbAlias: mysql
+        schema: "type  todos { \n\tid: ID! @primary @size(value: 50)       \n\tis_completed: Boolean         \n\tts: DateTime @createdAt      \n\tvalue: String         \n}"
+    eventingConfig:
+      dbAlias: mysql
+      enabled: true
+    eventingRules:
+      todo-cluster--todoapp--eventing-rule--default:
+        id: default
+        rule: allow
+    eventingSchemas: {}
+    eventingTriggers: {}
+    fileStoreConfig:
+      bucket: ""
+      conn: ""
+      enabled: false
+      endpoint: ""
+      secret: ""
+      storeType: ""
+    fileStoreRules: {}
+    ingressGlobal:
+      headers: null
+      resHeaders: null
+    ingressRoute: {}
+    letsencrypt:
+      domains: null
+    projectConfig:
+      aesKey: MTM0N2ViZjRhN2JmNGNlMDgxZGY4MDM0NzFiMjMxOGY=
+      contextTimeGraphQL: 5
+      id: todoapp
+      name: TodoApp
+      secrets:
+      - alg: ""
+        aud: null
+        isPrimary: true
+        iss: null
+        jwkUrl: ""
+        kid: C1RmUHpwOTJtO0FZOkIDCtrEA0UICR0o549NMZcGrT4=
+        privateKey: ""
+        publicKey: ""
+        secret: 52814288af894d8ca7e5c42c8695cddc
+    remoteServices: {}
+ssl:
+  crt: ""
+  enabled: false
+  key: ""

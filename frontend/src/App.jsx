@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import {makeid} from "./utils"
+import React, { useState, useEffect } from "react";
 import './App.css';
+
+import * as client from './client';
 
 // TodoInput is responsible to accept a user provided todo object. It calls the `addTodo`
 // utility function once the add button is hit.
@@ -74,31 +75,55 @@ const App = () => {
   // Declare a new state variable to store the todos
   const [todos, setTodos] = useState([]);
 
+  // We'll use `useEffect` to subscribe to the todos table when the component mounts and
+  // unsubscribe when it unmounts.
+  useEffect(() => {
+    const subscription = client.getTodos((err, todos) => {
+      if (err) {
+        alert(err)
+        return
+      }
+
+      // Set the todos as is.
+      setTodos(todos)
+    })
+
+    // Don't forget to unsubscribe when the component unmounts
+    return function cleanup() {
+      subscription.unsubscribe()
+    }
+  }, []);
+
   // `addTodo` is a utility to add todos to our state. This is also where, we'll
   // send a request to the server to add the todo to our database. 
   const addTodo = (value) => {
-    setTodos([...todos, {id: makeid(5), value, is_completed: false }])
+    client.addTodo(value).then(res => {
+      if (!res.ack) alert(res.error)
+    })
   }
 
   // `updateTodo` is a utility to update the `is_completed` field of the concerned todo.
   // This is also where, we'll send a request to the server to update the todo in our database.
   const updateTodo = (id, is_completed) => {
-    setTodos(todos.map(todo => {
-      if (todo.id === id) return Object.assign({}, todo, { is_completed: is_completed })
-      return todo
-    }))
+    client.updateTodo(id, is_completed).then(res => {
+      if (!res.ack) alert(res.error)
+    })
   } 
 
   // `deleteTodo` is a utility to delete the concerned todo. This is also where, we'll 
   // send a request to the server to delete the todo from our database.
   const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
+    client.deleteTodo(id).then(res => {
+      if (!res.ack) alert(res.error)
+    })
   }
   
   // `deleteTodos` is a utility to delete all todos. This is also where, we'll 
   // send a request to the server to delete all todos from our database.
   const deleteTodos = (id) => {
-    setTodos([])
+    client.deleteAllTodos(id).then(res => {
+      if (!res.ack) alert(res.error)
+    })
   }
 
   return (
